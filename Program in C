@@ -1,0 +1,206 @@
+#include<stdio.h>                
+#include<conio.h>                
+#include<string.h>               
+#include<stdlib.h>              
+
+void menu();                   
+void add_medicine();             
+void medicine_info();               
+void bill();           
+void search();   
+void remove();          
+
+struct date
+{
+	int mm,yy;
+};
+
+struct medicine
+{
+	int     mn;                  
+	char    mc[100];      
+	struct  date md,ed;            
+	float   cost;                
+	int     ml;                  
+}b[100];
+
+int main()
+{
+	menu();
+}
+
+void menu()
+{
+	int ch;
+	printf("\n\n.  .  .  .  .  .  .  .  .  .  .  .  .  .  ");
+	printf("\n\n\tPick ur Preference:");
+	printf("\n\n\t1.add medicine");
+	printf("\n\t2.bill");
+	printf("\n\t3.medicine Info");
+	printf("\n\t4.search");
+	printf("\n\t5.remove medicine");
+	printf("\n\t6.quit");
+	printf("\n\n\tEnter your preference from 1-6 as mentioned:");
+	fflush(stdin);            
+	scanf("%d",&ch);
+	switch(ch)
+	{
+		case 1:
+			add_medicine();
+			break;
+		case 2:
+			bill();
+			break;
+		case 3:
+			medicine_info();  
+			break;
+		case 4:
+			search();
+			break;
+		case 5:
+		    remove();
+			break;	
+		case 6:
+			exit(0);
+		default:
+		    getch();
+		    menu();
+	}
+}
+
+void add_medicine()
+{
+	char ch;
+	printf("\n\t\tAssign details of medicine(es):\n");
+	do
+	{
+		printf("\n\n\tmedicine Number:  %d",n);
+        b[n].mn=n;
+		
+		medicinecode:
+			printf("\n\n\tEnter medicine Code:\t");
+			fflush(stdin);
+			scanf("%s",&b[n].mc);
+					
+        printf("\n\tEnter date only in yy/mm format");
+		
+		arrivaldate:
+			printf("\n\tArrival date:\t");
+			fflush(stdin);
+			scanf("%d%c%d",&b[n].md.yy,&i,&b[n].md.mm);
+			if(b[n].md.yy==0)
+			{
+				printf("\n\tInvalid Entry...");
+				goto arrivaldate;
+			}
+		    if((i!='/')||(b[n].md.yy<=0)||(b[n].md.mm>12)||(b[n].md.mm<0))
+		    {
+		    	printf("\n\tInvalid date.....Enter only in yy/mm format");
+                goto arrivaldate;
+		    }
+		    
+		departuredate:
+		    printf("\n\tDeparture date:\t");
+		    fflush(stdin);
+		    scanf("%d%c%d",&b[n].ed.yy,&i,&b[n].ed.mm);
+		    if(b[n].ed.yy==0)
+			{
+				printf("\n\tInvalid Entry...");
+				goto departuredate;
+			}
+		    if((i!=':')||(b[n].ed.yy<0)||(b[n].ed.mm>12)||(b[n].ed.mm<0))
+		    {
+		        printf("\n\tInvalid date.....Enter only in yy/mm format");
+                goto departuredate;
+		    }
+		    
+		if(b[n].md.yy>b[n].ed.yy)
+		{
+		    printf("\n\t\tDeparture date should be greater than Arrival date");
+		    goto arrivaldate;
+		}
+		
+        printf("\n\tcost:\t");
+		fflush(stdin);    
+		scanf("%f",&b[n].cost);
+		emty();		
+		b[n].sr=0;		
+		
+	    printf("\n\tDo u want to assign another medicine;(y/n):\t ");
+		fflush(stdin);
+		scanf("%c",&ch);
+		n++;
+	}while(ch=='y'||ch=='Y');
+	menu();
+}
+
+void medicine_info()
+{
+	int a;
+	char ch;
+    printf("\n\n\t\tmedicineES AVALAIBLE\n");
+    for(a=1;a<n;a++)
+    {
+    	printf("\n\n\t\tmedicine no:\t\t\t%d",b[a].mn);
+        printf("\n\t\tmedicine code:\t\t%s",b[a].mc);
+        printf("\n\t\tArrival date:\t\t%d%c%d",b[a].md.yy,i,b[a].md.mm);
+        printf("\n\t\tDeparture date:\t\t%d%c%d",b[a].ed.yy,i,b[a].ed.mm);
+        printf("\n\t\tFare:\t\t\t%.4f",b[a].fare);
+        printf("\n\t\tSeats Reserved:\t\t%d\n",b[a].sr);
+        printf("\n\t\tSeats Left:\t\t%d\n",36-(b[a].sr));
+    }
+    printf("\n\n\t\tDo u need this information in a file?(Y/N):\t");
+    fflush(stdin);
+    scanf("%c",&ch);
+    if(ch=='y'||ch=='Y')
+   		medicinefile();
+    else
+        menu();
+}
+
+void bill()
+{
+	
+	
+	
+}
+
+void search()
+{
+	int fmn;
+	char ch;
+	printf("\n\n\t\tEnter medicine no.:\t");
+	fflush(stdin);
+	scanf("%d",&fmn);
+	if(fmn>=n||fmn<1)
+	{
+		printf("\n\t\tmedicine doesn't Exist!!!!");
+		search();
+	}
+	else
+	{
+		printf("\nmedicine code:\t%s",b[fmn].mc);
+	    printf("\nManufacturing date:\t%d%c%d",b[fmn].md.yy,i,b[fmn].md.mm);
+	    printf("\nExpiry date\t%d%c%d",b[fmn].ed.yy,i,b[fmn].ed.mm);	    	    
+	    printf("\nCost:\t\t%f",b[fmn].fare);
+	    printf("\nMedicine sold:\t%d",b[fmn].sr);
+	    printf("\nMedicine available:\t%d\n",100-b[fmn].sr);
+	getch();
+	printf("\n\n\t\tDo u want to continue with another medicine(y/n)??");
+	fflush(stdin);
+	scanf("%c",&ch);
+	if(ch=='y'||ch=='Y')
+	search();
+	else
+	menu();
+}
+
+void remove()
+
+{
+	int mnc;                                                  
+	char ch;
+	printf("\n\t\tMedicine Deletion");
+	printf("\n\tMedicine Number:");
+	scanf("%d",&mnc);	
+}
